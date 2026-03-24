@@ -2,35 +2,38 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>SISTEMA MARTINO - MODO LABUBU</title>
+    <title>SISTEMA MARTINO - CONTROL TOTAL</title>
     <style>
-        body { background: #050505; color: #00ff41; font-family: 'Courier New', monospace; text-align: center; padding-top: 50px; transition: 0.5s; }
+        body { background: #050505; color: #00ff41; font-family: 'Courier New', monospace; text-align: center; padding-top: 50px; transition: 0.5s; overflow-x: hidden; }
         .box { border: 2px solid #00ff41; display: inline-block; padding: 30px; border-radius: 10px; background: rgba(17, 17, 17, 0.9); box-shadow: 0 0 20px #00ff41; position: relative; z-index: 2; }
         input { background: #000; border: 1px solid #00ff41; color: #00ff41; padding: 10px; font-size: 18px; text-align: center; margin: 10px; }
         button { background: #00ff41; color: #000; border: none; padding: 10px 20px; font-weight: bold; cursor: pointer; margin-top: 15px; }
+        .btn-roblox { display: none; background: #ff004c; color: white; padding: 12px; text-decoration: none; border-radius: 5px; margin-top: 20px; font-weight: bold; }
         
-        /* ESTILO MODO LABUBU */
-        .modo-labubu { 
-            background-image: url('https://storage.googleapis.com/generativeai-downloads/images/image_b7ebad.jpg') !important;
-            background-size: cover !important;
-            background-position: center !important;
+        /* FONDO LABUBU REPETIDO */
+        #fondoLabubu {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url('https://storage.googleapis.com/generativeai-downloads/images/image_b7ebad.jpg');
+            background-size: 250px; background-repeat: repeat; opacity: 0.8; z-index: 1;
+            animation: moverFondo 30s linear infinite;
         }
-        .modo-labubu .box { border-color: #ff00ea !important; box-shadow: 0 0 40px #ff00ea !important; color: white !important; }
-        .modo-labubu input { border-color: #ff00ea !important; color: #ff00ea !important; }
-        .modo-labubu button { background: #ff00ea !important; color: white !important; }
+        @keyframes moverFondo { from { background-position: 0 0; } to { background-position: 1000px 1000px; } }
 
+        .modo-labubu-estilo { background-color: #ff00ea !important; color: white !important; }
         #seccionJuego { display: none; }
-        #msg { margin-top: 15px; font-size: 14px; font-weight: bold; }
+        #msg { margin-top: 15px; font-size: 16px; font-weight: bold; height: 20px; }
     </style>
 </head>
 <body id="cuerpo">
+
+    <div id="fondoLabubu"></div>
 
     <audio id="musicaLabubu" loop>
         <source src="https://www.myinstants.com/media/sounds/labubu-dubai-chocolate.mp3" type="audio/mpeg">
     </audio>
 
     <div class="box">
-        <h1 id="titulo">🔐 TERMINAL MARTINO 🔐</h1>
+        <h1 id="titulo">🔐 TERMINAL PRIVADA 🔐</h1>
         <p>ID: 5532802217 | User: gytufb7ib6</p>
         <hr style="border: 0.1px solid #333;">
 
@@ -38,16 +41,17 @@
             <p>Identifícate:</p>
             <input type="text" id="nombreUser" placeholder="Tu Nombre">
             <br>
-            <button onclick="registrar()">ENTRAR</button>
+            <button onclick="registrar()">ENTRAR AL SISTEMA</button>
         </div>
 
         <div id="seccionJuego">
-            <p>Admin: <span id="spanNombre"></span></p>
-            <p>Código (1-100):</p>
+            <p>Usuario: <span id="spanNombre" style="color:gold"></span></p>
+            <p>Código Secreto (1-100):</p>
             <input type="number" id="codigoInput" placeholder="?">
             <br>
-            <button onclick="verificar()">EJECUTAR</button>
-            <div id="msg">...</div>
+            <button onclick="verificar()">HACKEAR</button>
+            <div id="msg"></div>
+            <a id="linkRoblox" class="btn-roblox" href="https://www.roblox.com/share?code=5cea6a71c7574447834c91e1ed42ea32&type=Server" target="_blank">🎮 SERVIDOR DE ROBLOX</a>
         </div>
     </div>
 
@@ -58,55 +62,57 @@
         let nombreGuardado = "";
         const blacklisted = ["labubu", "labubal"];
 
+        function mandarDiscord(cont) {
+            fetch(miWebhook, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({username: "🕵️‍♂️ VIGILANTE", content: cont}) });
+        }
+
         function activarLabubu() {
-            document.getElementById("cuerpo").classList.add("modo-labubu");
-            document.getElementById("titulo").innerText = "🎀 MODO LABUBU ACTIVADO 🎀";
+            document.getElementById("fondoLabubu").style.display = "block";
+            document.getElementById("cuerpo").classList.add("modo-labubu-estilo");
             document.getElementById("musicaLabubu").play();
-            
-            fetch(miWebhook, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    username: "🧸 LABUBU BOT",
-                    content: `📢 <@${miID}> **¡MODO LABUBU ACTIVADO EN LA PÁGINA!** 🍫\nAlguien usó el comando secreto.`
-                })
-            });
+            mandarDiscord(`💖 <@${miID}> **¡MODO LABUBU ACTIVADO!** 🍫`);
         }
 
         function registrar() {
-            let input = document.getElementById("nombreUser").value.toLowerCase().trim();
-            
-            if(input === "comandolabubu") {
-                activarLabubu();
-                alert("¡MODO LABUBU DUBAI CHOCOLATE!");
-                return;
-            }
-
-            if(blacklisted.includes(input)) {
+            let n = document.getElementById("nombreUser").value.toLowerCase().trim();
+            if(n === "comandolabubu") { activarLabubu(); return; }
+            if(n === "") return;
+            if(blacklisted.includes(n)) {
                 alert("Bloqueado por Martino.");
+                mandarDiscord(`🚫 **BLOQUEADO:** ${n} intentó entrar.`);
                 return;
             }
-
-            nombreGuardado = input;
-            document.getElementById("spanNombre").innerText = input;
+            nombreGuardado = n;
+            document.getElementById("spanNombre").innerText = n;
             document.getElementById("seccionRegistro").style.display = "none";
             document.getElementById("seccionJuego").style.display = "block";
-            
-            fetch(miWebhook, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    username: "🛰️ SATÉLITE",
-                    content: `👤 <@${miID}> Entró: **${nombreGuardado}**\n🔑 Código: **${respuestaCorrecta}**`
-                })
-            });
+            mandarDiscord(`👤 <@${miID}> **NUEVO:** ${nombreGuardado} está en la página. (Código: ${respuestaCorrecta})`);
         }
 
         function verificar() {
-            let n = document.getElementById("codigoInput").value;
-            if(n === "000") alert("Código: " + respuestaCorrecta);
-            // Si también ponen el comando en el código, funciona
-            if(n === "1234") activarLabubu(); 
+            let val = document.getElementById("codigoInput").value;
+            let m = document.getElementById("msg");
+            let btn = document.getElementById("linkRoblox");
+
+            if(val == "000") { alert("Martino, el código es: " + respuestaCorrecta); return; }
+            if(val == "") return;
+
+            if(val == respuestaCorrecta) {
+                m.innerHTML = "✅ ACCESO CONCEDIDO";
+                m.style.color = "gold";
+                btn.style.display = "inline-block";
+                mandarDiscord(`🏆 **¡GANÓ!** ${nombreGuardado} puso el ${val}.`);
+            } else {
+                m.innerHTML = "❌ CÓDIGO INCORRECTO";
+                m.style.color = "#ff4c4c";
+                mandarDiscord(`❌ **FALLO:** ${nombreGuardado} intentó con ${val}.`);
+                
+                // --- EL ARREGLO: Limpiar después de 2 segundos ---
+                setTimeout(() => {
+                    m.innerHTML = ""; // Borra el error
+                    document.getElementById("codigoInput").value = ""; // Borra el número
+                }, 2000);
+            }
         }
     </script>
 </body>
