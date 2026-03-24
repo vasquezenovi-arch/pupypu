@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>SISTEMA MARTINO - MODO LABUBU</title>
+    <style>
+        body { background: #050505; color: #00ff41; font-family: 'Courier New', monospace; text-align: center; padding-top: 50px; transition: 0.5s; }
+        .box { border: 2px solid #00ff41; display: inline-block; padding: 30px; border-radius: 10px; background: rgba(17, 17, 17, 0.9); box-shadow: 0 0 20px #00ff41; position: relative; z-index: 2; }
+        input { background: #000; border: 1px solid #00ff41; color: #00ff41; padding: 10px; font-size: 18px; text-align: center; margin: 10px; }
+        button { background: #00ff41; color: #000; border: none; padding: 10px 20px; font-weight: bold; cursor: pointer; margin-top: 15px; }
+        
+        /* ESTILO MODO LABUBU */
+        .modo-labubu { 
+            background-image: url('https://storage.googleapis.com/generativeai-downloads/images/image_b7ebad.jpg') !important;
+            background-size: cover !important;
+            background-position: center !important;
+        }
+        .modo-labubu .box { border-color: #ff00ea !important; box-shadow: 0 0 40px #ff00ea !important; color: white !important; }
+        .modo-labubu input { border-color: #ff00ea !important; color: #ff00ea !important; }
+        .modo-labubu button { background: #ff00ea !important; color: white !important; }
+
+        #seccionJuego { display: none; }
+        #msg { margin-top: 15px; font-size: 14px; font-weight: bold; }
+    </style>
+</head>
+<body id="cuerpo">
+
+    <audio id="musicaLabubu" loop>
+        <source src="https://www.myinstants.com/media/sounds/labubu-dubai-chocolate.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="box">
+        <h1 id="titulo">🔐 TERMINAL MARTINO 🔐</h1>
+        <p>ID: 5532802217 | User: gytufb7ib6</p>
+        <hr style="border: 0.1px solid #333;">
+
+        <div id="seccionRegistro">
+            <p>Identifícate:</p>
+            <input type="text" id="nombreUser" placeholder="Tu Nombre">
+            <br>
+            <button onclick="registrar()">ENTRAR</button>
+        </div>
+
+        <div id="seccionJuego">
+            <p>Admin: <span id="spanNombre"></span></p>
+            <p>Código (1-100):</p>
+            <input type="number" id="codigoInput" placeholder="?">
+            <br>
+            <button onclick="verificar()">EJECUTAR</button>
+            <div id="msg">...</div>
+        </div>
+    </div>
+
+    <script>
+        const miWebhook = "https://discord.com/api/webhooks/1485793552951803985/Vne_NvGGJnVFwREsPpvZQS-MvyU-N1yBnuBDseo6qTpDQl4i4OEzczMjsKpC9eVWIKh0";
+        const miID = "1398816776757969038";
+        let respuestaCorrecta = Math.floor(Math.random() * 100) + 1;
+        let nombreGuardado = "";
+        const blacklisted = ["labubu", "labubal"];
+
+        function activarLabubu() {
+            document.getElementById("cuerpo").classList.add("modo-labubu");
+            document.getElementById("titulo").innerText = "🎀 MODO LABUBU ACTIVADO 🎀";
+            document.getElementById("musicaLabubu").play();
+            
+            fetch(miWebhook, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    username: "🧸 LABUBU BOT",
+                    content: `📢 <@${miID}> **¡MODO LABUBU ACTIVADO EN LA PÁGINA!** 🍫\nAlguien usó el comando secreto.`
+                })
+            });
+        }
+
+        function registrar() {
+            let input = document.getElementById("nombreUser").value.toLowerCase().trim();
+            
+            if(input === "comandolabubu") {
+                activarLabubu();
+                alert("¡MODO LABUBU DUBAI CHOCOLATE!");
+                return;
+            }
+
+            if(blacklisted.includes(input)) {
+                alert("Bloqueado por Martino.");
+                return;
+            }
+
+            nombreGuardado = input;
+            document.getElementById("spanNombre").innerText = input;
+            document.getElementById("seccionRegistro").style.display = "none";
+            document.getElementById("seccionJuego").style.display = "block";
+            
+            fetch(miWebhook, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    username: "🛰️ SATÉLITE",
+                    content: `👤 <@${miID}> Entró: **${nombreGuardado}**\n🔑 Código: **${respuestaCorrecta}**`
+                })
+            });
+        }
+
+        function verificar() {
+            let n = document.getElementById("codigoInput").value;
+            if(n === "000") alert("Código: " + respuestaCorrecta);
+            // Si también ponen el comando en el código, funciona
+            if(n === "1234") activarLabubu(); 
+        }
+    </script>
+</body>
+</html>
